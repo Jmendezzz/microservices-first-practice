@@ -42,4 +42,15 @@ public class UserController {
             .map(u-> new ResponseEntity<>(userService.save(user), HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> delete(@PathVariable Long id){
+    Optional<User> userOptional = userService.getById(id);
+
+    if(userOptional.isEmpty()){
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    userService.delete(id);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 }
