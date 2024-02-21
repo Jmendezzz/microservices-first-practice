@@ -1,6 +1,7 @@
 package org.mendez.springcloud.msvc.users.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name="users")
@@ -9,11 +10,16 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+
+  @NotBlank
   private String name;
 
   @Column(unique = true)
+  @Email
+  @NotBlank
   private String email;
 
+  @NotBlank
   private String password;
 
   public Long getId() {

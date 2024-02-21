@@ -1,14 +1,18 @@
 package org.mendez.springcloud.msvc.users.controllers;
 
 
+import jakarta.validation.Valid;
 import org.mendez.springcloud.msvc.users.entities.User;
 import org.mendez.springcloud.msvc.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -31,12 +35,12 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<User> save(@RequestBody User user){
+  public ResponseEntity<?> save(@RequestBody @Valid User user){
     return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
   }
 
   @PutMapping
-  public ResponseEntity<User> update(@RequestBody User user){
+  public ResponseEntity<User> update(@RequestBody @Valid User user){
     Optional<User> userOptional = userService.getById(user.getId());
     return userOptional
             .map(u-> new ResponseEntity<>(userService.save(user), HttpStatus.OK))

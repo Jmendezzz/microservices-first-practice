@@ -1,6 +1,7 @@
 package org.mendez.springcloud.msvc.users.services.imp;
 
 import org.mendez.springcloud.msvc.users.entities.User;
+import org.mendez.springcloud.msvc.users.exceptions.UserDuplicatedEmailException;
 import org.mendez.springcloud.msvc.users.repositories.UserRepository;
 import org.mendez.springcloud.msvc.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class UserServiceImp implements UserService {
   @Override
   @Transactional
   public User save(User user) {
+    if(getByEmail(user.getEmail()).isPresent()){
+      throw new UserDuplicatedEmailException();
+    }
     return userRepository.save(user);
   }
 
@@ -37,5 +41,10 @@ public class UserServiceImp implements UserService {
   @Transactional
   public void delete(Long id) {
     userRepository.deleteById(id);
+  }
+
+  @Override
+  public Optional<User> getByEmail(String email) {
+    return userRepository.findUserByEmail(email);
   }
 }
