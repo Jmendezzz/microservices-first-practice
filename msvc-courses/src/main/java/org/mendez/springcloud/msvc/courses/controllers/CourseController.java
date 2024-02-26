@@ -2,6 +2,7 @@ package org.mendez.springcloud.msvc.courses.controllers;
 
 import jakarta.validation.Valid;
 import org.mendez.springcloud.msvc.courses.entities.Course;
+import org.mendez.springcloud.msvc.courses.models.User;
 import org.mendez.springcloud.msvc.courses.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,5 +55,22 @@ public class CourseController {
     courseService.delete(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
+
+  @PutMapping("/assign-user/{courseId}")
+  public ResponseEntity<?> assignUser(@PathVariable Long courseId, @RequestBody User user){
+    Optional<User> userOptional = courseService.assignUser(courseId, user);
+    return userOptional
+            .map(u-> new ResponseEntity<>(u,HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @PutMapping("/create-user/{courseId}")
+  public ResponseEntity<?> createUser(@PathVariable Long courseId, @RequestBody User user){
+    Optional<User> userOptional = courseService.createUser(user,courseId);
+    return userOptional
+            .map(u-> new ResponseEntity<>(u,HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
 
 }

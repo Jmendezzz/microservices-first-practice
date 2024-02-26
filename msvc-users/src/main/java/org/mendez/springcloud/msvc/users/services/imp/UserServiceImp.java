@@ -31,7 +31,7 @@ public class UserServiceImp implements UserService {
   @Override
   @Transactional
   public User save(User user) {
-    if(getByEmail(user.getEmail()).isPresent()){
+    if(userRepository.existsByEmail(user.getEmail())){
       throw new UserDuplicatedEmailException();
     }
     return userRepository.save(user);
