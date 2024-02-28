@@ -64,9 +64,17 @@ public class CourseController {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @PutMapping("/create-user/{courseId}")
+  @PostMapping("/create-user/{courseId}")
   public ResponseEntity<?> createUser(@PathVariable Long courseId, @RequestBody User user){
     Optional<User> userOptional = courseService.createUser(user,courseId);
+    return userOptional
+            .map(u-> new ResponseEntity<>(u,HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @DeleteMapping("/unassign-user/{courseId}")
+  public ResponseEntity<?> unassignUser(@PathVariable Long courseId, @RequestBody User user){
+    Optional<User> userOptional = courseService.unassignUser(courseId, user);
     return userOptional
             .map(u-> new ResponseEntity<>(u,HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
